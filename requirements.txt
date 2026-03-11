@@ -2,7 +2,7 @@ flask
 flask-login
 gunicorn
 tensorflow
-opencv-python
+opencv-python-headless
 numpy
 pandas
 matplotlib
