@@ -29,7 +29,19 @@ from utils.report_generator import build_interpretation_text, generate_medical_r
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
-PERSIST_DIR = os.environ.get("PERSIST_DIR")
+
+
+def resolve_persist_dir(path: str | None) -> str | None:
+    if not path:
+        return None
+    try:
+        os.makedirs(path, exist_ok=True)
+    except OSError:
+        return None
+    return path
+
+
+PERSIST_DIR = resolve_persist_dir(os.environ.get("PERSIST_DIR"))
 
 DB_DIR = os.path.join(PERSIST_DIR, "database") if PERSIST_DIR else os.path.join(BASE_DIR, "database")
 DB_PATH = os.path.join(DB_DIR, "patients.db")
