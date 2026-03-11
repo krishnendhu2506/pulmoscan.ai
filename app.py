@@ -28,10 +28,17 @@ from model.predict import CLASS_NAMES, predict_scan
 from utils.report_generator import build_interpretation_text, generate_medical_report
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DB_DIR = os.path.join(BASE_DIR, "database")
+STATIC_DIR = os.path.join(BASE_DIR, "static")
+PERSIST_DIR = os.environ.get("PERSIST_DIR")
+
+DB_DIR = os.path.join(PERSIST_DIR, "database") if PERSIST_DIR else os.path.join(BASE_DIR, "database")
 DB_PATH = os.path.join(DB_DIR, "patients.db")
-UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
-REPORT_DIR = os.path.join(BASE_DIR, "static", "reports")
+
+UPLOAD_DIR = os.path.join(STATIC_DIR, "uploads")
+REPORT_DIR = os.path.join(STATIC_DIR, "reports")
+
+PERSIST_UPLOAD_DIR = os.path.join(PERSIST_DIR, "uploads") if PERSIST_DIR else None
+PERSIST_REPORT_DIR = os.path.join(PERSIST_DIR, "reports") if PERSIST_DIR else None
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
 
 
@@ -57,10 +64,34 @@ def get_db_connection() -> sqlite3.Connection:
     return conn
 
 
-def init_db() -> None:
+def ensure_storage_paths() -> None:
     os.makedirs(DB_DIR, exist_ok=True)
-    os.makedirs(UPLOAD_DIR, exist_ok=True)
-    os.makedirs(REPORT_DIR, exist_ok=True)
+
+    if PERSIST_DIR:
+        os.makedirs(PERSIST_UPLOAD_DIR, exist_ok=True)
+        os.makedirs(PERSIST_REPORT_DIR, exist_ok=True)
+
+        for link_path, target_path in (
+            (UPLOAD_DIR, PERSIST_UPLOAD_DIR),
+            (REPORT_DIR, PERSIST_REPORT_DIR),
+        ):
+            if os.path.islink(link_path):
+                continue
+            if os.path.exists(link_path):
+                continue
+            try:
+                os.symlink(target_path, link_path)
+            except OSError:
+                pass
+
+    if not os.path.islink(UPLOAD_DIR):
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
+    if not os.path.islink(REPORT_DIR):
+        os.makedirs(REPORT_DIR, exist_ok=True)
+
+
+def init_db() -> None:
+    ensure_storage_paths()
 
     conn = get_db_connection()
     conn.execute(

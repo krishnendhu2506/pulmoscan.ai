@@ -1,5 +1,6 @@
 flask
 flask-login
+gunicorn
 tensorflow
 opencv-python
 numpy
