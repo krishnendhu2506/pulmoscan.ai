@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+dataset/
+model/*.h5
+static/uploads/
+static/reports/
+database/patients.db

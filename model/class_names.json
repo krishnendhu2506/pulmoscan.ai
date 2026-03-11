@@ -1,0 +1,14 @@
+{
+  "canonical_classes": [
+    "normal",
+    "adenocarcinoma",
+    "squamous_cell_carcinoma",
+    "large_cell_carcinoma"
+  ],
+  "display_classes": [
+    "Normal",
+    "Adenocarcinoma",
+    "Squamous Cell Carcinoma",
+    "Large Cell Carcinoma"
+  ]
+}

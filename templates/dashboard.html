@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Dashboard</h2>
+<div class="row g-3 mb-4">
+    <div class="col-md-6 col-lg-3">
+        <div class="card stat-card bg-light">
+            <div class="card-body">
+                <h6>Total Patients</h6>
+                <h3>{{ total_patients }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <div class="card stat-card bg-light">
+            <div class="card-body">
+                <h6>Total Scans</h6>
+                <h3>{{ total_scans }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Prediction Distribution</h5>
+                <canvas id="distributionChart" height="260"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5>Recent Predictions</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                            <tr>
+                                <th>Patient ID</th>
+                                <th>Name</th>
+                                <th>Result</th>
+                                <th>Confidence</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in recent_predictions %}
+                            <tr>
+                                <td>{{ row.patient_uid }}</td>
+                                <td>{{ row.full_name }}</td>
+                                <td>{{ row.prediction_label }}</td>
+                                <td>{{ "%.2f"|format(row.confidence * 100) }}%</td>
+                                <td>{{ row.created_at }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="5" class="text-center">No predictions yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    window.distributionData = {{ distribution|tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

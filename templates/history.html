@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-3">Prediction History</h2>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle table-hover">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Patient ID</th>
+                        <th>Patient Name</th>
+                        <th>Prediction</th>
+                        <th>Confidence</th>
+                        <th>Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in records %}
+                    <tr>
+                        <td>{{ row.created_at }}</td>
+                        <td>{{ row.patient_uid }}</td>
+                        <td>{{ row.full_name }}</td>
+                        <td>{{ row.prediction_label }}</td>
+                        <td>{{ "%.2f"|format(row.confidence * 100) }}%</td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-success" href="{{ url_for('download_report', scan_id=row.id) }}">Download</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="6" class="text-center">No scan history found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

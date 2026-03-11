@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero-card text-center p-4 p-md-5 mx-auto">
+    <p class="hero-tag mb-2">AI-ASSISTED LUNG ANALYSIS</p>
+    <h1 class="display-5 fw-bold mb-3">Welcome to Pulmoscan AI</h1>
+    <p class="lead mb-4">Upload CT scans, run intelligent classification, and generate clear clinical reports in one place.</p>
+    <div class="d-flex gap-2 justify-content-center flex-wrap">
+        <a class="btn btn-primary btn-lg px-4" href="{{ url_for('login') }}">Sign In</a>
+        <a class="btn btn-outline-primary btn-lg px-4" href="{{ url_for('register') }}">Create Account</a>
+    </div>
+</div>
+{% endblock %}
