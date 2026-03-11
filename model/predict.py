@@ -5,12 +5,7 @@ import sys
 from typing import Dict
 
 import numpy as np
-
-try:
-    import keras
-except Exception:  # pragma: no cover - fallback for environments without standalone keras
-    keras = None
-    import tensorflow as tf
+import tensorflow as tf
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if BASE_DIR not in sys.path:
@@ -53,10 +48,7 @@ def load_tf_model():
             raise FileNotFoundError(
                 "Model not found at model/lung_cancer_model.h5. Train or place the model file first."
             )
-        if keras is not None:
-            _model = keras.saving.load_model(H5_MODEL_PATH, compile=False)
-        else:
-            _model = tf.keras.models.load_model(H5_MODEL_PATH, compile=False)
+        _model = tf.keras.models.load_model(H5_MODEL_PATH, compile=False)
 
     return _model
 
