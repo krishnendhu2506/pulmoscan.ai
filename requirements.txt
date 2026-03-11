@@ -2,6 +2,7 @@ flask
 flask-login
 gunicorn
 tensorflow==2.15.0
+keras==3.3.3
 opencv-python-headless
 numpy
 pandas
